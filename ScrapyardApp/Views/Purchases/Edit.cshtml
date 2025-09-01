@@ -1,0 +1,39 @@
+﻿@model ScrapyardApp.Models.Purchase
+<h2>Edit Purchase</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ScrapItemId"></label>
+        <select asp-for="ScrapItemId" class="form-control" required>
+            <option value="">Select Scrap Item</option>
+            @foreach (var item in ViewBag.ScrapItems)
+            {
+                <option value="@item.Id">@item.Name (@item.Category?.Name)</option>
+            }
+        </select>
+        <span asp-validation-for="ScrapItemId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="WeightPurchased"></label>
+        <input asp-for="WeightPurchased" class="form-control" required />
+        <span asp-validation-for="WeightPurchased" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PurchasePrice"></label>
+        <input asp-for="PurchasePrice" class="form-control" required />
+        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Supplier"></label>
+        <input asp-for="Supplier" class="form-control" />
+        <span asp-validation-for="Supplier" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

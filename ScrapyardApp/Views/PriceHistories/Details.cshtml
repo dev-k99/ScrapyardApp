@@ -1,0 +1,21 @@
+﻿@model ScrapyardApp.Models.PriceHistory
+<h2>Price History Details</h2>
+<div>
+    <h4>@Model.ScrapItem.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ScrapItem.Name)</dt>
+        <dd class="col-sm-10">@Model.ScrapItem.Name</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PricePerKg)</dt>
+        <dd class="col-sm-10">@Model.PricePerKg</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.EffectiveDate)</dt>
+        <dd class="col-sm-10">@Model.EffectiveDate.ToString("yyyy-MM-dd")</dd>
+    </dl>
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

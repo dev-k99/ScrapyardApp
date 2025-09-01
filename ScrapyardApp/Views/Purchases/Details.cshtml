@@ -1,0 +1,25 @@
+﻿@model ScrapyardApp.Models.Purchase
+<h2>Purchase Details</h2>
+<div>
+    <h4>@Model.ScrapItem.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ScrapItem.Name)</dt>
+        <dd class="col-sm-10">@Model.ScrapItem.Name</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.WeightPurchased)</dt>
+        <dd class="col-sm-10">@Model.WeightPurchased</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PurchasePrice)</dt>
+        <dd class="col-sm-10">@Model.PurchasePrice</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PurchaseDate)</dt>
+        <dd class="col-sm-10">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Supplier)</dt>
+        <dd class="col-sm-10">@Model.Supplier</dd>
+    </dl>
+</div>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

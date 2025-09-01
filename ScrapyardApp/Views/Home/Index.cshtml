@@ -1,0 +1,178 @@
+﻿@{
+    ViewData["Title"] = "Scrapyard Management System";
+}
+
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary mb-3">
+        <i class="bi bi-recycle me-3"></i>Welcome to Scrapyard Management
+    </h1>
+    <p class="lead text-secondary fs-5">Efficiently manage your scrap inventory, sales, and customer relationships with our comprehensive management system</p>
+</div>
+
+<!-- Dashboard Stats Cards -->
+<div class="row mb-5">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="dashboard-card text-center">
+            <div class="card-body">
+                <i class="bi bi-boxes display-6 mb-3"></i>
+                <h5 class="card-title">Inventory</h5>
+                <p class="card-text">Manage</p>
+                <a asp-controller="ScrapItems" asp-action="Index" class="btn btn-light btn-sm">View Inventory</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="dashboard-card text-center">
+            <div class="card-body">
+                <i class="bi bi-cart-check display-6 mb-3"></i>
+                <h5 class="card-title">Sales</h5>
+                <p class="card-text">Track</p>
+                <a asp-controller="Sales" asp-action="Index" class="btn btn-light btn-sm">View Sales</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="dashboard-card text-center">
+            <div class="card-body">
+                <i class="bi bi-cart-plus display-6 mb-3"></i>
+                <h5 class="card-title">Purchases</h5>
+                <p class="card-text">Record</p>
+                <a asp-controller="Purchases" asp-action="Index" class="btn btn-light btn-sm">View Purchases</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="dashboard-card text-center">
+            <div class="card-body">
+                <i class="bi bi-people display-6 mb-3"></i>
+                <h5 class="card-title">Customers</h5>
+                <p class="card-text">Manage</p>
+                <a asp-controller="Customers" asp-action="Index" class="btn btn-light btn-sm">View Customers</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Section -->
+<div class="row mb-5">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-lightning me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a asp-controller="ScrapItems" asp-action="Create" class="btn btn-outline-primary w-100 py-3">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Scrap Item
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-controller="Sales" asp-action="Create" class="btn btn-outline-success w-100 py-3">
+                            <i class="bi bi-cart-check me-2"></i>Create New Sale
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-controller="Purchases" asp-action="Create" class="btn btn-outline-info w-100 py-3">
+                            <i class="bi bi-cart-plus me-2"></i>Record Purchase
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-controller="Customer" asp-action="Create" class="btn btn-outline-warning w-100 py-3">
+                            <i class="bi bi-person-plus me-2"></i>Add New Customer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-graph-up me-2"></i>Reports & Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-controller="PriceHistories" asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-graph-up me-2"></i>Price History
+                    </a>
+                    <a asp-controller="AuditLogs" asp-action="Index" class="btn btn-outline-dark">
+                        <i class="bi bi-journal-text me-2"></i>Audit Logs
+                    </a>
+                    <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="bi bi-tags me-2"></i>Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Features -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-gear me-2"></i>System Features</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-shield-check text-success display-4 mb-3"></i>
+                            <h6 class="fw-bold">Secure & Reliable</h6>
+                            <p class="text-muted small">User authentication and role-based access control</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-clock-history text-info display-4 mb-3"></i>
+                            <h6 class="fw-bold">Audit Trail</h6>
+                            <p class="text-muted small">Complete tracking of all system changes and activities</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="bi bi-graph-up text-warning display-4 mb-3"></i>
+                            <h6 class="fw-bold">Price Tracking</h6>
+                            <p class="text-muted small">Monitor price changes and market trends over time</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Getting Started Guide -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-question-circle me-2"></i>Getting Started</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-primary">For New Users:</h6>
+                        <ol class="text-muted">
+                            <li>Start by adding scrap item categories</li>
+                            <li>Create your first scrap item entries</li>
+                            <li>Add customer information</li>
+                            <li>Record your first purchase or sale</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success">Pro Tips:</h6>
+                        <ul class="text-muted">
+                            <li>Use consistent naming conventions</li>
+                            <li>Regularly update price information</li>
+                            <li>Review audit logs for compliance</li>
+                            <li>Backup your data regularly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

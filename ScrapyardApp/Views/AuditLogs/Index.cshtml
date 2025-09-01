@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ScrapyardApp.Models.AuditLog>
+<h2>Audit Logs</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Action)</th>
+            <th>@Html.DisplayNameFor(model => model.Entity)</th>
+            <th>@Html.DisplayNameFor(model => model.EntityId)</th>
+            <th>@Html.DisplayNameFor(model => model.User.UserName)</th>
+            <th>@Html.DisplayNameFor(model => model.ActionDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Details)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auditLog in Model)
+        {
+            <tr>
+                <td>@auditLog.Action</td>
+                <td>@auditLog.Entity</td>
+                <td>@auditLog.EntityId</td>
+                <td>@auditLog.User.UserName</td>
+                <td>@auditLog.ActionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@auditLog.Details</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@auditLog.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

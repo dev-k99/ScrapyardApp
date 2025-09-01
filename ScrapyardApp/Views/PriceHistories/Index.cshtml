@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ScrapyardApp.Models.PriceHistory>
+<h2>Price History</h2>
+<a asp-action="Create" class="btn btn-primary">Add New Price History</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ScrapItem.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.PricePerKg)</th>
+            <th>@Html.DisplayNameFor(model => model.EffectiveDate)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var priceHistory in Model)
+        {
+            <tr>
+                <td>@priceHistory.ScrapItem.Name</td>
+                <td>@priceHistory.PricePerKg</td>
+                <td>@priceHistory.EffectiveDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@priceHistory.Id" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@priceHistory.Id" class="btn btn-primary btn-sm">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@priceHistory.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

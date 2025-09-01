@@ -1,0 +1,32 @@
+﻿@model IEnumerable<ScrapyardApp.Models.Purchase>
+<h2>Purchases</h2>
+<a asp-action="Create" class="btn btn-primary">Record New Purchase</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ScrapItem.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.WeightPurchased)</th>
+            <th>@Html.DisplayNameFor(model => model.PurchasePrice)</th>
+            <th>@Html.DisplayNameFor(model => model.PurchaseDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Supplier)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var purchase in Model)
+        {
+            <tr>
+                <td>@purchase.ScrapItem.Name</td>
+                <td>@purchase.WeightPurchased</td>
+                <td>@purchase.PurchasePrice</td>
+                <td>@purchase.PurchaseDate.ToString("yyyy-MM-dd")</td>
+                <td>@purchase.Supplier</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@purchase.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@purchase.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@purchase.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

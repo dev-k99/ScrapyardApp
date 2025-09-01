@@ -1,0 +1,55 @@
+﻿@model ScrapyardApp.Models.Sale
+<h2>Edit Sale</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="ScrapItemId"></label>
+        <select asp-for="ScrapItemId" class="form-control" required>
+            <option value="">Select Scrap Item</option>
+            @foreach (var item in ViewBag.ScrapItems)
+            {
+                <option value="@item.Id">@item.Name (Available: @item.Quantity kg)</option>
+            }
+        </select>
+        <span asp-validation-for="ScrapItemId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CustomerId"></label>
+        <select asp-for="CustomerId" class="form-control" required>
+            <option value="">Select Customer</option>
+            @foreach (var customer in ViewBag.Customers)
+            {
+                <option value="@customer.Id">@customer.Name (@customer.CustomerType)</option>
+            }
+        </select>
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="WeightSold"></label>
+        <input asp-for="WeightSold" class="form-control" required />
+        <span asp-validation-for="WeightSold" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PaymentMethod"></label>
+        <select asp-for="PaymentMethod" class="form-control" required>
+            <option value="">Select Payment Method</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit">Credit</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+        </select>
+        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="InvoiceNumber"></label>
+        <input asp-for="InvoiceNumber" class="form-control" required />
+        <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

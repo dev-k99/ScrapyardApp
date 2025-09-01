@@ -1,0 +1,29 @@
+﻿@model ScrapyardApp.Models.Purchase
+<h2>Delete Purchase</h2>
+<h3>Are you sure you want to delete this purchase?</h3>
+<div>
+    <h4>@Model.ScrapItem.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.ScrapItem.Name)</dt>
+        <dd class="col-sm-10">@Model.ScrapItem.Name</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.WeightPurchased)</dt>
+        <dd class="col-sm-10">@Model.WeightPurchased</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PurchasePrice)</dt>
+        <dd class="col-sm-10">@Model.PurchasePrice</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.PurchaseDate)</dt>
+        <dd class="col-sm-10">@Model.PurchaseDate.ToString("yyyy-MM-dd")</dd>
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Supplier)</dt>
+        <dd class="col-sm-10">@Model.Supplier</dd>
+    </dl>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
