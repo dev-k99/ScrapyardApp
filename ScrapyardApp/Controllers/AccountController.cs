@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿// Controllers/AccountController.cs
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ScrapyardApp.Models;
-using System.Threading.Tasks;
 
 namespace ScrapyardApp.Controllers
 {
@@ -16,59 +16,58 @@ namespace ScrapyardApp.Controllers
             _signInManager = signInManager;
         }
 
-        // GET: /Account/Register
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
-        // POST: /Account/Register
         [HttpPost]
         public async Task<IActionResult> Register(string email, string password, string fullName)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                var user = new ApplicationUser { UserName = email, Email = email, FullName = fullName };
-                var result = await _userManager.CreateAsync(user, password);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                ViewBag.Error = "Please fill all fields";
+                return View();
             }
+
+            var user = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                FullName = fullName
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Error = "Email already taken or weak password";
             return View();
         }
 
-        // GET: /Account/Login
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
-        // POST: /Account/Login
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password, bool rememberMe)
+        public async Task<IActionResult> Login(string email, string password)
         {
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                var result = await _signInManager.PasswordSignInAsync(email, password, rememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ViewBag.Error = "Enter email and password";
+                return View();
             }
+
+            var result = await _signInManager.PasswordSignInAsync(email, password, true, false);
+
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Home");
+
+            ViewBag.Error = "Wrong email or password";
             return View();
         }
 
-        // POST: /Account/Logout
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

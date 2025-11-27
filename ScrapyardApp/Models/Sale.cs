@@ -49,6 +49,6 @@ namespace ScrapyardApp.Models
         [Display(Name = "Invoice Number")]
         public string InvoiceNumber { get; set; } // Unique identifier for the sale
 
-        public bool IsActive { get; set; } = true; // Default to true for active sales
+        //public bool IsActive { get; set; } = true; // Default to true for active sales
     }
 }

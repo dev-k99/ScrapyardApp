@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ScrapyardApp.Controllers
 {
     [Authorize]
-    public class PurchasesController : Controller
+    public class PurchasesController : BaseController
     {
         private readonly ScrapyardDbContext _context;
 
@@ -27,6 +27,7 @@ namespace ScrapyardApp.Controllers
                 .OrderByDescending(p => p.PurchaseDate)
                 .ToListAsync());
         }
+    
 
         // GET: Purchases/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -71,17 +72,7 @@ namespace ScrapyardApp.Controllers
                     _context.Update(scrapItem);
                     await _context.SaveChangesAsync();
 
-                    // Log the action
-                    var auditLog = new AuditLog
-                    {
-                        Action = "Create",
-                        Entity = "Purchase",
-                        EntityId = purchase.Id,
-                        UserId = User.Identity.Name,
-                        ActionDate = DateTime.Now,
-                        Details = $"Created purchase: Item: {scrapItem.Name}, Weight: {purchase.WeightPurchased}kg, Supplier: {purchase.Supplier}"
-                    };
-                    _context.AuditLogs.Add(auditLog);
+                    
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction(nameof(Index));
@@ -135,17 +126,7 @@ namespace ScrapyardApp.Controllers
                         _context.Update(scrapItem);
                         await _context.SaveChangesAsync();
 
-                        // Log the action
-                        var auditLog = new AuditLog
-                        {
-                            Action = "Edit",
-                            Entity = "Purchase",
-                            EntityId = purchase.Id,
-                            UserId = User.Identity.Name,
-                            ActionDate = DateTime.Now,
-                            Details = $"Edited purchase: Item: {scrapItem.Name}, Weight: {purchase.WeightPurchased}kg, Supplier: {purchase.Supplier}"
-                        };
-                        _context.AuditLogs.Add(auditLog);
+                     
                         await _context.SaveChangesAsync();
 
                         return RedirectToAction(nameof(Index));
@@ -201,17 +182,7 @@ namespace ScrapyardApp.Controllers
                 _context.Purchases.Remove(purchase);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Delete",
-                    Entity = "Purchase",
-                    EntityId = id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Deleted purchase: Item: {purchase.ScrapItem.Name}, Weight: {purchase.WeightPurchased}kg, Supplier: {purchase.Supplier}"
-                };
-                _context.AuditLogs.Add(auditLog);
+          
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

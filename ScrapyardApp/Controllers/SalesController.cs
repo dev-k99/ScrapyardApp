@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace ScrapyardApp.Controllers
 {
     [Authorize]
-    public class SalesController : Controller
+    public class SalesController : BaseController
     {
         private readonly ScrapyardDbContext _context;
 
@@ -48,6 +48,7 @@ namespace ScrapyardApp.Controllers
 
             return View(sale);
         }
+        
 
         // GET: Sales/Create
         public IActionResult Create()
@@ -57,54 +58,45 @@ namespace ScrapyardApp.Controllers
             return View();
         }
 
-        // POST: Sales/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ScrapItemId,CustomerId,WeightSold,TotalPrice,PaymentMethod,InvoiceNumber")] Sale sale)
+        public async Task<IActionResult> Create(Sale sale)
         {
             if (ModelState.IsValid)
             {
-                if (_context.Sales.Any(s => s.InvoiceNumber == sale.InvoiceNumber))
+                var scrapItem = await _context.ScrapItems.FindAsync(sale.ScrapItemId);
+                var customer = await _context.Customers.FindAsync(sale.CustomerId);
+
+                if (scrapItem == null || customer == null || scrapItem.Quantity < sale.WeightSold)
                 {
-                    ModelState.AddModelError("InvoiceNumber", "Invoice number must be unique.");
+                    ModelState.AddModelError("", "Invalid item, customer, or insufficient stock.");
                 }
                 else
                 {
-                    var scrapItem = await _context.ScrapItems.FindAsync(sale.ScrapItemId);
-                    if (scrapItem != null && scrapItem.Quantity >= sale.WeightSold)
-                    {
-                        sale.TotalPrice = (decimal)sale.WeightSold * scrapItem.PricePerKg;
-                        sale.SaleDate = DateTime.Now;
-                        scrapItem.Quantity -= (int)sale.WeightSold;
+                    sale.InvoiceNumber = GenerateInvoiceNumber();
+                    sale.TotalPrice = (decimal)sale.WeightSold * scrapItem.PricePerKg;
+                    sale.SaleDate = DateTime.Now;
 
-                        _context.Add(sale);
-                        _context.Update(scrapItem);
-                        await _context.SaveChangesAsync();
+                    scrapItem.Quantity -= sale.WeightSold;
 
-                        // Log the action
-                        var customer = await _context.Customers.FindAsync(sale.CustomerId);
-                        var auditLog = new AuditLog
-                        {
-                            Action = "Create",
-                            Entity = "Sale",
-                            EntityId = sale.Id,
-                            UserId = User.Identity.Name,
-                            ActionDate = DateTime.Now,
-                            Details = $"Created sale: Invoice {sale.InvoiceNumber}, Item: {scrapItem.Name}, Customer: {customer.Name}, Weight: {sale.WeightSold}kg"
-                        };
-                        _context.AuditLogs.Add(auditLog);
-                        await _context.SaveChangesAsync();
+                    _context.Add(sale);
+                    await _context.SaveChangesAsync();
 
-                        return RedirectToAction(nameof(Index));
-                    }
-                    ModelState.AddModelError("", "Insufficient inventory or invalid item.");
+                    TempData["Success"] = $"Sale {sale.InvoiceNumber} created!";
+                    return RedirectToAction(nameof(Index));
                 }
             }
-            ViewBag.ScrapItems = _context.ScrapItems.ToList();
-            ViewBag.Customers = _context.Customers.ToList();
+            ViewBag.ScrapItems = await _context.ScrapItems.Select(s => new { s.Id, s.Name }).ToListAsync();
+            ViewBag.Customers = await _context.Customers.Select(c => new { c.Id, c.Name }).ToListAsync();
             return View(sale);
         }
 
+        private string GenerateInvoiceNumber()
+        {
+            var today = DateTime.Today.ToString("yyyyMMdd");
+            var count = _context.Sales.Count(s => s.InvoiceNumber.StartsWith($"INV-{today}")) + 1;
+            return $"INV-{today}-{count:D4}";
+        }
         // GET: Sales/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -157,18 +149,7 @@ namespace ScrapyardApp.Controllers
                                 _context.Update(scrapItem);
                                 await _context.SaveChangesAsync();
 
-                                // Log the action
-                                var customer = await _context.Customers.FindAsync(sale.CustomerId);
-                                var auditLog = new AuditLog
-                                {
-                                    Action = "Edit",
-                                    Entity = "Sale",
-                                    EntityId = sale.Id,
-                                    UserId = User.Identity.Name,
-                                    ActionDate = DateTime.Now,
-                                    Details = $"Edited sale: Invoice {sale.InvoiceNumber}, Item: {scrapItem.Name}, Customer: {customer.Name}, Weight: {sale.WeightSold}kg"
-                                };
-                                _context.AuditLogs.Add(auditLog);
+                               
                                 await _context.SaveChangesAsync();
 
                                 return RedirectToAction(nameof(Index));
@@ -232,17 +213,7 @@ namespace ScrapyardApp.Controllers
                 _context.Sales.Remove(sale);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Delete",
-                    Entity = "Sale",
-                    EntityId = id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Deleted sale: Invoice {sale.InvoiceNumber}, Item: {sale.ScrapItem.Name}, Customer: {sale.Customer.Name}"
-                };
-                _context.AuditLogs.Add(auditLog);
+                
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

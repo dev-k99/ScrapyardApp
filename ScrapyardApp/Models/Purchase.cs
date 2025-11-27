@@ -35,7 +35,7 @@ namespace ScrapyardApp.Models
         [StringLength(100, ErrorMessage = "Supplier cannot exceed 100 characters")]
         public string Supplier { get; set; } // Optional: Name of supplier
 
-        // ForSoftDelete
-        public bool IsActive { get; set; } = true; // Default to true for active purchases
+        //// ForSoftDelete
+        //public bool IsActive { get; set; } = true; // Default to true for active purchases
     }
 }

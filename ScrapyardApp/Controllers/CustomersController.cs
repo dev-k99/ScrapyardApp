@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ScrapyardApp.Controllers
 {
     [Authorize]
-    public class CustomersController : Controller
+    public class CustomersController : BaseController
     {
         private readonly ScrapyardDbContext _context;
 
@@ -41,6 +41,7 @@ namespace ScrapyardApp.Controllers
 
             return View(customer);
         }
+      
 
         // GET: Customers/Create
         public IActionResult Create()
@@ -58,18 +59,18 @@ namespace ScrapyardApp.Controllers
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Create",
-                    Entity = "Customer",
-                    EntityId = customer.Id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Created customer: {customer.Name}, Type: {customer.CustomerType}"
-                };
-                _context.AuditLogs.Add(auditLog);
-                await _context.SaveChangesAsync();
+                //// Log the action
+                //var auditLog = new AuditLog
+                //{
+                //    Action = "Create",
+                //    Entity = "Customer",
+                //    EntityId = customer.Id,
+                //    UserId = User.Identity.Name,
+                //    ActionDate = DateTime.Now,
+                //    Details = $"Created customer: {customer.Name}, Type: {customer.CustomerType}"
+                //};
+                //_context.AuditLogs.Add(auditLog);
+                //await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -109,17 +110,7 @@ namespace ScrapyardApp.Controllers
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
 
-                    // Log the action
-                    var auditLog = new AuditLog
-                    {
-                        Action = "Edit",
-                        Entity = "Customer",
-                        EntityId = customer.Id,
-                        UserId = User.Identity.Name,
-                        ActionDate = DateTime.Now,
-                        Details = $"Edited customer: {customer.Name}, Type: {customer.CustomerType}"
-                    };
-                    _context.AuditLogs.Add(auditLog);
+                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -164,17 +155,7 @@ namespace ScrapyardApp.Controllers
                 _context.Customers.Remove(customer);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Delete",
-                    Entity = "Customer",
-                    EntityId = id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Deleted customer: {customer.Name}"
-                };
-                _context.AuditLogs.Add(auditLog);
+              
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace ScrapyardApp.Controllers
 {
     [Authorize]
-    public class ScrapItemsController : Controller
+    public class ScrapItemsController : BaseController
     {
         private readonly ScrapyardDbContext _context;
 
@@ -24,6 +24,7 @@ namespace ScrapyardApp.Controllers
         {
             return View(await _context.ScrapItems.Include(si => si.Category).ToListAsync());
         }
+       
 
         // GET: ScrapItems/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -61,17 +62,7 @@ namespace ScrapyardApp.Controllers
                 _context.Add(scrapItem);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Create",
-                    Entity = "ScrapItem",
-                    EntityId = scrapItem.Id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Created scrap item: {scrapItem.Name}, Weight: {scrapItem.Weight}kg, Price: {scrapItem.PricePerKg}/kg"
-                };
-                _context.AuditLogs.Add(auditLog);
+                
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -115,30 +106,7 @@ namespace ScrapyardApp.Controllers
                     _context.Update(scrapItem);
                     await _context.SaveChangesAsync();
 
-                    // Log price change if PricePerKg has changed
-                    if (originalScrapItem.PricePerKg != scrapItem.PricePerKg)
-                    {
-                        var priceHistory = new PriceHistory
-                        {
-                            ScrapItemId = scrapItem.Id,
-                            PricePerKg = scrapItem.PricePerKg,
-                            EffectiveDate = DateTime.Now
-                        };
-                        _context.PriceHistories.Add(priceHistory);
-                        await _context.SaveChangesAsync();
-                    }
-
-                    // Log the action
-                    var auditLog = new AuditLog
-                    {
-                        Action = "Edit",
-                        Entity = "ScrapItem",
-                        EntityId = scrapItem.Id,
-                        UserId = User.Identity.Name,
-                        ActionDate = DateTime.Now,
-                        Details = $"Edited scrap item: {scrapItem.Name}, Weight: {scrapItem.Weight}kg, Price: {scrapItem.PricePerKg}/kg"
-                    };
-                    _context.AuditLogs.Add(auditLog);
+                   
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -185,17 +153,7 @@ namespace ScrapyardApp.Controllers
                 _context.ScrapItems.Remove(scrapItem);
                 await _context.SaveChangesAsync();
 
-                // Log the action
-                var auditLog = new AuditLog
-                {
-                    Action = "Delete",
-                    Entity = "ScrapItem",
-                    EntityId = id,
-                    UserId = User.Identity.Name,
-                    ActionDate = DateTime.Now,
-                    Details = $"Deleted scrap item: {scrapItem.Name}"
-                };
-                _context.AuditLogs.Add(auditLog);
+             
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));

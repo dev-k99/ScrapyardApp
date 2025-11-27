@@ -26,7 +26,7 @@ namespace ScrapyardApp.Models
 
         [Required(ErrorMessage = "Quantity is required")]
         [Range(0, int.MaxValue, ErrorMessage = "Quantity cannot be negative")]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
         [Display(Name = "Description")]
